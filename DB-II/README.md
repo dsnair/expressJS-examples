@@ -3,7 +3,7 @@
 Topics:
 
 - Relational Databases
-- SQLite (_ I used PostgreSQL_)
+- SQLite (_I used PostgreSQL_)
 - Knex
 - Create/Read/Update/Delete operations
 

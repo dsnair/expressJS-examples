@@ -27,8 +27,15 @@ const postZoo = async (req, res) => {
   }
 }
 
-const getZoo = (req, res) => res.status(200).send('GET works!')
-
+const getZoo = async (req, res) => {
+  try {
+    const zoos = await knex.select().from('zoos')
+    return res.status(200).json(zoos)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error, msg: 'Error getting zoos' })
+  }
+}
 // routes
 app.post('/', postZoo)
 app.get('/', getZoo)

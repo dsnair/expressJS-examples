@@ -36,6 +36,28 @@ const getZoo = async (req, res) => {
     res.status(500).json({ error, msg: 'Error getting zoos' })
   }
 }
+
+const deleteZoo = async (req, res) => {
+  const id = req.params.id
+  try {
+    const isDeleted = await knex('zoos')
+      .where({ id })
+      .del()
+    if (!isDeleted) {
+      return res
+        .status(404)
+        .send(`Couldn't delete zoo ID ${id} because it doesn't exist`)
+    } else {
+      const zoos = await knex.select().from('zoos')
+      res.status(200).json(zoos)
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error, msg: `Error deleting zoo ID ${id}` })
+  }
+}
+
 // routes
 app.post('/', postZoo)
 app.get('/', getZoo)
+app.delete('/:id', deleteZoo)

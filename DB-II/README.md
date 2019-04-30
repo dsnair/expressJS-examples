@@ -22,6 +22,77 @@ You'll write a server that lets you create and read _Zoos_ stored in a Relationa
 - To start the API server, run `yarn start` or `npm start`.
 - Use _Postman_ to test your API.
 
+### PostgreSQL Setup
+
+#1 Init Express app
+
+```bash
+yarn init -y  # creates package.json, -y skips all the terminal questions
+yarn add express knex pg
+yarn add nodemon -D
+./node_modules/.bin/knex init  # creates knexfile.js
+```
+
+Include the following in `package.json`:
+
+```json
+"scripts": {
+    "server": "nodemon index.js",
+    "start": "node index.js"
+}
+```
+
+Write the `index.js` file to initialize the Express app
+
+#2 Configure Knex
+
+- Edit the `knexfile.js` file
+- Create the`/db/migrations` sub-directory in the root project directory
+- Also, create the `knex.js` file in the `/db` directory
+
+#3 Setup migrations
+
+```bash
+./node_modules/.bin/knex migrate:make zoos
+```
+
+Write the table schema in `/db/migrations/[timestamp]_zoos.js` file
+
+#4 Setup Postgres DB
+
+```bash
+# install postgres
+brew install postgres
+
+# start postgres server
+pg_ctl -D /usr/local/var/postgres start
+
+# create DB
+initdb /usr/local/var/postgres
+
+# if the previous step throws a terminal error 'directory "/usr/local/var/postgres" exists ...',
+# remove old DB and re-run the previous command
+rm -r /usr/local/var/postgres
+initdb /usr/local/var/postgres
+
+# create new DB named zoos
+createdb zoos
+```
+
+#5 Migrate into DB
+
+```bash
+./node_modules/.bin/knex migrate:latest
+```
+
+#6 Test HTTP methods (GET, etc.) in Postman
+
+#7 The following deletes the zoos DB just created
+
+```bash
+dropdb zoos
+```
+
 ## Specifications
 
 ### Table

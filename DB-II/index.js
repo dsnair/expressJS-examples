@@ -57,7 +57,38 @@ const deleteZoo = async (req, res) => {
   }
 }
 
+const putZoo = async (req, res) => {
+  const id = req.params.id
+  const newZoo = req.body
+
+  if (!newZoo.name) {
+    return res.status(400).send(`Zoo name must be provided`)
+  }
+
+  try {
+    const isUpdated = await knex('zoos')
+      .where({ id })
+      .update(newZoo)
+    if (!isUpdated) {
+      return res
+        .status(404)
+        .send(`Couldn't update zoo ID ${id} because it doesn't exist`)
+    } else {
+      const zoos = await knex.select().from('zoos')
+      res.status(200).json(zoos)
+    }
+  } catch (error) {
+    error.code === '23505'
+      ? res.status(500).json({
+          error,
+          msg: `Please enter a unique name. ${newZoo.name} already exists.`
+        })
+      : res.status(500).json({ error, msg: `Error updating zoo ID ${id}` })
+  }
+}
+
 // routes
 app.post('/', postZoo)
 app.get('/', getZoo)
 app.delete('/:id', deleteZoo)
+app.put('/:id', putZoo)

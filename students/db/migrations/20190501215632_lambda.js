@@ -11,6 +11,7 @@ exports.up = async function(knex, Promise) {
       table
         .integer('cohortId')
         .unsigned()
+        .notNullable()  // don't want NULL foreign keys
         .references('cohorts.cohortId')
     })
 }

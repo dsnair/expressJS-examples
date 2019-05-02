@@ -21,7 +21,9 @@ const getStudentsByCohort = async (req, res) => {
       .where('cohorts.cohortId', id)
       .select()
     if (!students.length)
-      return res.status(404).send(`cohort ID ${id} doesn't exist`)
+      return res
+        .status(200)
+        .json({ msg: `There are no students with cohort ID ${id}` })
     else res.status(200).json(students)
   } catch (error) {
     res
@@ -75,10 +77,33 @@ const putCohort = async (req, res) => {
   }
 }
 
+const postCohort = async (req, res) => {
+  const newCohort = req.body
+
+  if (!newCohort.name)
+    return res.status(400).send(`Cohort name must be provided`)
+
+  try {
+    await knex('cohorts').insert(newCohort)
+    const cohorts = await knex.select().from('cohorts')
+    res.status(201).json(cohorts)
+  } catch (error) {
+    error.code === '23505'
+      ? res.status(500).json({
+          error,
+          msg: `Please enter a unique cohort name. ${
+            newCohort.name
+          } already exists.`
+        })
+      : res.status(500).json({ error, msg: 'Error creating new cohort' })
+  }
+}
+
 // routes
 router.get('/', getCohorts)
 router.get('/:cohortId/students', getStudentsByCohort)
 router.delete('/:cohortId', deleteCohort)
 router.put('/:cohortId', putCohort)
+router.post('/', postCohort)
 
 module.exports = router

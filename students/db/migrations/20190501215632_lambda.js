@@ -17,6 +17,8 @@ exports.up = async function(knex, Promise) {
         .references('cohorts.cohortId')
         // set the foreign key to null when the primary key it references is deleted
         .onDelete('SET NULL')
+        // when the primary key changes, reflect those changes in foreign key
+        .onUpdate('CASCADE')
     })
 }
 

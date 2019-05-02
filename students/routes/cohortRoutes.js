@@ -9,7 +9,6 @@ const getCohorts = async (req, res) => {
     const cohorts = await knex.select().from('cohorts')
     return res.status(200).json(cohorts)
   } catch (error) {
-    console.error(error)
     res.status(500).json({ error, msg: 'Error getting cohorts' })
   }
 }
@@ -25,7 +24,6 @@ const getStudentsByCohort = async (req, res) => {
       return res.status(404).send(`cohort ID ${id} doesn't exist`)
     else res.status(200).json(students)
   } catch (error) {
-    console.error(error)
     res
       .status(500)
       .json({ error, msg: `Error getting students by cohort ID ${id}` })
@@ -44,8 +42,36 @@ const deleteCohort = async (req, res) => {
       res.status(200).json(cohorts)
     }
   } catch (error) {
-    console.error(error)
     res.status(500).json({ error, msg: `Error deleting cohort ID ${id}` })
+  }
+}
+
+const putCohort = async (req, res) => {
+  const id = req.params.cohortId
+  const newCohort = req.body
+
+  if (!newCohort.name) {
+    return res.status(400).send(`Cohort name must be provided`)
+  }
+
+  try {
+    const isUpdated = await knex('cohorts')
+      .where('cohortId', id)
+      .update(newCohort)
+    if (!isUpdated) return res.status(404).send(`cohort ID ${id} doesn't exist`)
+    else {
+      const cohorts = await knex.select().from('cohorts')
+      res.status(200).json(cohorts)
+    }
+  } catch (error) {
+    error.code === '23505'
+      ? res.status(500).json({
+          error,
+          msg: `Please enter a unique cohort name. ${
+            newCohort.name
+          } already exists.`
+        })
+      : res.status(500).json({ error, msg: `Error updating cohort ID ${id}` })
   }
 }
 
@@ -53,5 +79,6 @@ const deleteCohort = async (req, res) => {
 router.get('/', getCohorts)
 router.get('/:cohortId/students', getStudentsByCohort)
 router.delete('/:cohortId', deleteCohort)
+router.put('/:cohortId', putCohort)
 
 module.exports = router

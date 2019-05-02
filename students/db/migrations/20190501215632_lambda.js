@@ -3,7 +3,10 @@ exports.up = async function(knex, Promise) {
   return await knex.schema
     .createTable('cohorts', table => {
       table.increments('cohortId').unsigned()
-      table.string('name').notNullable()
+      table
+        .string('name')
+        .notNullable()
+        .unique()
     })
     .createTable('students', table => {
       table.increments('studentId').unsigned()
@@ -11,8 +14,9 @@ exports.up = async function(knex, Promise) {
       table
         .integer('cohortId')
         .unsigned()
-        .notNullable()  // don't want NULL foreign keys
         .references('cohorts.cohortId')
+        // set the foreign key to null when the primary key it references is deleted
+        .onDelete('SET NULL')
     })
 }
 

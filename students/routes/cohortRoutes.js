@@ -115,12 +115,22 @@ const getCohortById = async (req, res) => {
   }
 }
 
+// middleware
+const capitalize = (req, res, next) => {
+  req.body.name = req.body.name
+    .toLowerCase()
+    .split(' ')
+    .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+    .join(' ')
+  next()
+}
+
 // routes
 router.get('/', getCohorts)
 router.get('/:cohortId/students', getStudentsByCohort)
 router.delete('/:cohortId', deleteCohort)
-router.put('/:cohortId', putCohort)
-router.post('/', postCohort)
+router.put('/:cohortId', capitalize, putCohort)
+router.post('/', capitalize, postCohort)
 router.get('/:cohortId', getCohortById)
 
 module.exports = router

@@ -2,12 +2,16 @@
 exports.up = async function(knex, Promise) {
   return await knex.schema
     .createTable('cohorts', table => {
-      table.increments('cohortId')
+      table.increments('cohortId').unsigned()
       table.string('name').notNullable()
     })
     .createTable('students', table => {
-      table.increments('studentId').references('cohorts.cohortId')
+      table.increments('studentId')
       table.string('name').notNullable()
+      table
+        .integer('cohortId')
+        .unsigned()
+        .references('cohorts.cohortId')
     })
 }
 

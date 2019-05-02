@@ -99,11 +99,28 @@ const postCohort = async (req, res) => {
   }
 }
 
+const getCohortById = async (req, res) => {
+  const id = req.params.cohortId
+  try {
+    const cohort = await knex('cohorts')
+      .where('cohortId', id)
+      .select()
+    if (!cohort.length) {
+      return res.status(400).send(`Cohort ID ${id} doesn't exist`)
+    } else {
+      res.status(200).json(cohort)
+    }
+  } catch (error) {
+    res.status(500).json({ error, msg: `Error getting cohort ID ${id}` })
+  }
+}
+
 // routes
 router.get('/', getCohorts)
 router.get('/:cohortId/students', getStudentsByCohort)
 router.delete('/:cohortId', deleteCohort)
 router.put('/:cohortId', putCohort)
 router.post('/', postCohort)
+router.get('/:cohortId', getCohortById)
 
 module.exports = router

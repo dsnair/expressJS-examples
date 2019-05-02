@@ -6,7 +6,7 @@ exports.up = async function(knex, Promise) {
       table.string('name').notNullable()
     })
     .createTable('students', table => {
-      table.increments('studentId')
+      table.increments('studentId').unsigned()
       table.string('name').notNullable()
       table
         .integer('cohortId')

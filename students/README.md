@@ -109,6 +109,13 @@ createdb lambda
 ./node_modules/.bin/knex seed:run
 ```
 
+or, run the `init.sh` script
+
+```bash
+chmod +x init.sh
+./init.sh
+```
+
 #6 Test HTTP methods (GET, etc.) in Postman
 
 #7 The following deletes the lambda DB just created

@@ -33,9 +33,21 @@ This will be akin to the Web API that you built in the last sprint, only this ti
 Demonstrate your understanding of this week's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
 1. Explain the difference between `RDBMS` and `SQL`.
+
+> RDBMS (relational database management system) store data in a tabular form
+> SQL (structured query language) is the programming language that is used to query a RDBMS/tabular data
+
 1. Why do tables need a `primary key`?
+
+> Primary keys help uniquely identify a table record/row
+
 1. What is the name given to a table column that references the primary key on another table.
+
+> Foreign key
+
 1. What do we need in order to have a _many to many_ relationship between two tables.
+
+> A third table, called the join table, which is used to break the many-to-many relationships into two one-to-many relationships. This is done by having foreign keys from each of the two tables.
 
 ## Project Set Up
 
@@ -76,9 +88,9 @@ Feel free to name the tables and fields anything you want. **Add relationships**
 - Build the database and tables using knex migrations. **Seeding is not needed**.
 - Build the API with the following endpoints:
 
-  - POST for adding projects.
-  - POST for adding actions.
-  - GET for retrieving a `project` by its `id` that returns an object with the following structure:
+  - [x] POST for adding projects.
+  - [x] POST for adding actions.
+  - [x] GET for retrieving a `project` by its `id` that returns an object with the following structure:
 
     ```js
     {
@@ -109,7 +121,7 @@ This section is **optional** and not counted towards MVP. Start working on it af
 
 Add the remaining CRUD operations for projects and actions.
 
-Use `knex` to add _data seeding_ scripts for projects and actions.
+[x] Use `knex` to add _data seeding_ scripts for projects and actions.
 
 Add support for the concept of `contexts`. A context is something like _at home_, _at work_ or _at computer_. The idea is that some actions require one or more `contexts` in order to be worked on. For example, the action of _file income taxes_ may require that you are _at home_, _at computer_ and _online_, so if you are _at work_ and look at the list of pending actions you could do in your current context, filing your taxes will not be one of them.
 

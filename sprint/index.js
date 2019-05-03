@@ -12,7 +12,7 @@ const postProject = async (req, res) => {
   const newProject = req.body
 
   if (!newProject.name)
-    return res.status(400).send('A new project must have a name.')
+    return res.status(400).send('A project must have a name.')
   try {
     await knex('projects').insert(newProject)
     const projects = await knex.select().from('projects')
@@ -28,9 +28,34 @@ const postProject = async (req, res) => {
   }
 }
 
+const postAction = async (req, res) => {
+  const newAction = req.body
+
+  if (!newAction.description)
+    return res.status(400).send('An action must have a description.')
+  try {
+    await knex('actions').insert({
+      ...newAction,
+      projectId: req.params.projectId
+    })
+    const actions = await knex.select().from('actions')
+    res.status(201).json(actions)
+  } catch (error) {
+    console.error(error)
+    error.code === '23505'
+      ? res.status(500).json({
+          error,
+          msg: `Action description must be unique. ${
+            newAction.description
+          } already exists.`
+        })
+      : res.status(500).json({ error, msg: 'Error creating new action' })
+  }
+}
+
 // routes
 
 app.post('/projects', postProject)
-// app.post('/actions', postAction)
+app.post('/projects/:projectId/actions', postAction)
 // app.get('/projects/:projectId', getAllById)
 app.get('/', (req, res) => res.send(`API is up ⬆`))

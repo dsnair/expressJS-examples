@@ -77,7 +77,7 @@ Feel free to name the tables and fields anything you want. **Add relationships**
 - Build the API with the following endpoints:
 
   - [x] POST for adding projects.
-  - POST for adding actions.
+  - [x] POST for adding actions.
   - GET for retrieving a `project` by its `id` that returns an object with the following structure:
 
     ```js

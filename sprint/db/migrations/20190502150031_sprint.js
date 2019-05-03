@@ -2,13 +2,13 @@ exports.up = async function(knex, Promise) {
   return await knex.schema
     .createTable('projects', table => {
       table.increments('projectId').unsigned()
-      table.string('name').notNullable()
+      table.string('name').notNullable().unique()
       table.text('description')
       table.boolean('isCompleted').defaultTo(false)
     })
     .createTable('actions', table => {
       table.increments('actionId').unsigned()
-      table.text('description').notNullable()
+      table.text('description').notNullable().unique()
       table.text('notes')
       table.boolean('isCompleted').defaultTo(false)
 

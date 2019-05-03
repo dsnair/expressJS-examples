@@ -8,7 +8,7 @@ const createFakeProject = () => ({
 
 exports.seed = async function(knex, Promise) {
   const fakeProjects = []
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     fakeProjects.push(createFakeProject())
   }
   return await knex('projects').insert(fakeProjects)

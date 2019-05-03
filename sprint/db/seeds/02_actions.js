@@ -1,10 +1,10 @@
 const faker = require('faker')
 
 const createFakeAction = () => ({
-  description: faker.hacker.ingverb(),
+  description: `${faker.hacker.verb()} ${faker.hacker.adjective()} ${faker.hacker.noun()}`,
   notes: faker.hacker.phrase(),
   isCompleted: faker.random.boolean(),
-  projectId: Math.floor(Math.random() * 2) + 1 // random number between 1 and 2
+  projectId: Math.floor(Math.random() * 2) + 1  // random number between 1 and 2
 })
 
 exports.seed = async function(knex, Promise) {

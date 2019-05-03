@@ -53,9 +53,31 @@ const postAction = async (req, res) => {
   }
 }
 
-// routes
+const getById = async (req, res) => {
+  const projectId = req.params.projectId
+  try {
+    const project = await knex('projects')
+      .where('projectId', projectId)
+      .first()
 
+    if (!project)
+      return res.status(404).send(`Project ID ${projectId} doesn't exist`)
+
+    const action = await knex('actions')
+      .join('projects', 'actions.projectId', 'projects.projectId')
+      .where('actions.projectId', projectId)
+    res.status(200).json({ ...project, action })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      error,
+      msg: `Error fetching project ID ${projectId} and its actions`
+    })
+  }
+}
+
+// routes
 app.post('/projects', postProject)
 app.post('/projects/:projectId/actions', postAction)
-// app.get('/projects/:projectId', getAllById)
+app.get('/projects/:projectId', getById)
 app.get('/', (req, res) => res.send(`API is up ⬆`))

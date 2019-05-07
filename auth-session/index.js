@@ -43,7 +43,8 @@ const login = async (req, res) => {
       .where('username', req.body.username)
       .first()
 
-    if (!user) return res.status(400).send(`${req.body.username} doesn't exist.`)
+    if (!user)
+      return res.status(400).send(`${req.body.username} doesn't exist.`)
     else {
       const isAuthenticated = await bcrypt.compareSync(
         req.body.password,
@@ -59,7 +60,22 @@ const login = async (req, res) => {
     console.error(error)
     res
       .status(500)
-      .json({ error, msg: `Something went wrong while logging-in ${req.body.username}.` })
+      .json({
+        error,
+        msg: `Something went wrong while logging-in ${req.body.username}.`
+      })
+  }
+}
+
+const getUsers = async (req, res) => {
+  try {
+    const users = await knex('users')
+    res.status(200).json(users)
+  } catch (error) {
+    console.error(error)
+    res
+      .status(500)
+      .json({ error, msg: 'Something went wrong while fetching users.' })
   }
 }
 
@@ -69,3 +85,4 @@ const login = async (req, res) => {
 app.get('/', (rep, res) => res.send('server is alive 🥁'))
 app.post('/register', register)
 app.post('/login', login)
+app.get('/users', getUsers)

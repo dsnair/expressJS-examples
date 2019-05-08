@@ -4,6 +4,7 @@ const express = require('express')
 const knex = require('./db/knex')
 const bcrypt = require('bcrypt')
 const session = require('express-session')
+const KnexSessionStore = require('connect-session-knex')(session) // require()() is called currying
 
 // variables
 const secret = process.env.SECRET
@@ -21,13 +22,26 @@ app.use(
     secret,
     saveUninitialized: false, // don't create new session automatically, important to comply with law
     resave: false, // don't save session if it didn't change
+
     cookie: {
       // 60 secs = 1 min, 60 mins = 1 hour, 24 hours = 1 day; multiplied by 1000 for millisecs
       maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day (in millisecs), how long should session stay alive
+
       httpOnly: true, // prevent JS code from accessing cookies
+
       // set true in production, false in development
       secure: process.env.NODE_ENV === 'production' // only send cookie over HTTPS, not HTTP
-    }
+    },
+    
+    // store session data in DB, default is memory
+    store: new KnexSessionStore({
+      tablename: 'sessions', // optional, defaults to 'sessions'
+      knex,
+      createtable: true, // create table automatically
+
+      // 1000 ms = 1 sec, 60 sec = 1 min, 60 min = 1 hour
+      clearInterval: 1000 * 60 * 60 // clear expired sessions every hour
+    })
   })
 )
 

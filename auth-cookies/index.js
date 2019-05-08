@@ -92,7 +92,26 @@ const login = async (req, res) => {
   }
 }
 
-const getUsers = async (req, res) => {
+const logout = (req, res) => {
+  if (req.session) {
+    // destroy this cookie session and create a new one on new request
+    req.session.destroy(err => {
+      if (err) {
+        res.json({
+          error: err,
+          msg: `Something went wrong while logging-out the user.`
+        })
+      } else {
+        res.clearCookie('cookie')
+        res.redirect('/')
+      }
+    })
+  } else {
+    res.send('The user is already logged-out.')
+  }
+}
+
+const users = async (req, res) => {
   try {
     const users = await knex('users')
     res.status(200).json(users)
@@ -115,4 +134,5 @@ const protectRoute = async (req, res, next) => {
 app.get('/', (rep, res) => res.send('server is alive 🥁'))
 app.post('/signup', signup)
 app.post('/login', login)
-app.get('/users', protectRoute, getUsers)
+app.get('/users', protectRoute, users)
+app.get('/logout', logout)

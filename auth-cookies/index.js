@@ -1,14 +1,37 @@
+// imports
 const express = require('express')
 const knex = require('./db/knex')
 const bcrypt = require('bcrypt')
+const session = require('express-session')
 
-const app = express()
-app.use(express.json())
+// variables
+const secret = process.env.COOKIE_SECRET
 const port = process.env.PORT || 9090
+
+// config server
+const app = express()
 app.listen(port, () => console.log('server is alive 🥁'))
 
+app.use(express.json()) // parse incoming request data
+
+app.use(
+  session({
+    name: 'cookie',
+    secret,
+    saveUninitialized: false, // don't create new session automatically, important to comply with law
+    resave: false, // don't save session if it didn't change
+    cookie: {
+      // 60 secs = 1 min, 60 mins = 1 hour, 24 hours = 1 day; multiplied by 1000 for millisecs
+      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day (in millisecs), how long should session stay alive
+      httpOnly: true, // prevent JS code from accessing cookies
+      // set true in production, false in development
+      secure: process.env.NODE_ENV === 'production' // only send cookie over HTTPS, not HTTP
+    }
+  })
+)
+
 // route handlers
-const register = async (req, res) => {
+const signup = async (req, res) => {
   const user = req.body
 
   if (!user.username || !user.password)
@@ -28,9 +51,10 @@ const register = async (req, res) => {
             user.username
           } already exists.`
         })
-      : res
-          .status(500)
-          .json({ error, msg: `Something went wrong while creating new user.` })
+      : res.status(500).json({
+          error,
+          msg: `Something went wrong while signing-up new user.`
+        })
   }
 }
 
@@ -109,6 +133,6 @@ const protectRoute = async (req, res, next) => {
 
 // routes
 app.get('/', (rep, res) => res.send('server is alive 🥁'))
-app.post('/register', register)
+app.post('/signup', signup)
 app.post('/login', login)
 app.get('/users', protectRoute, getUsers)

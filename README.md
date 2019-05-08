@@ -11,4 +11,5 @@
     - middleware
     - authentication
         - hashing passwords with bcrypt.js for signup and login
+        - using cookies to persist logged-in users (so they don't have to sign-in again)
         - protected routes

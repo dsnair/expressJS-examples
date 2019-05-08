@@ -1,36 +1,75 @@
+// imports
+require('dotenv').config()
 const express = require('express')
 const knex = require('./db/knex')
 const bcrypt = require('bcrypt')
+const session = require('express-session')
+const KnexSessionStore = require('connect-session-knex')(session) // require()() is called currying
 
-const app = express()
-app.use(express.json())
+// variables
+const secret = process.env.SECRET
 const port = process.env.PORT || 9090
+
+// config server
+const app = express()
 app.listen(port, () => console.log('server is alive 🥁'))
 
-// route handlers
-const register = async (req, res) => {
-  const user = req.body
+app.use(express.json()) // parse incoming request data
 
-  if (!user.username || !user.password)
+app.use(
+  session({
+    name: 'cookie',
+    secret,
+    saveUninitialized: false, // don't create new session automatically, important to comply with law
+    resave: false, // don't save session if it didn't change
+
+    cookie: {
+      // 60 secs = 1 min, 60 mins = 1 hour, 24 hours = 1 day; multiplied by 1000 for millisecs
+      maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day (in millisecs), how long should session stay alive
+
+      httpOnly: true, // prevent JS code from accessing cookies
+
+      // set true in production, false in development
+      secure: process.env.NODE_ENV === 'production' // only send cookie over HTTPS, not HTTP
+    },
+    
+    // store session data in DB, default is memory
+    store: new KnexSessionStore({
+      tablename: 'sessions', // optional, defaults to 'sessions'
+      knex,
+      createtable: true, // create table automatically
+
+      // 1000 ms = 1 sec, 60 sec = 1 min, 60 min = 1 hour
+      clearInterval: 1000 * 60 * 60 // clear expired sessions every hour
+    })
+  })
+)
+
+// route handlers
+const signup = async (req, res) => {
+  if (!req.body.username || !req.body.password)
     return res.status(400).send(`Username and password is required.`)
 
   try {
+    req.session.username = req.body.username // save username in cookie session
+
     // hash the original password, then hash the hash 2^10 times
-    const hash = await bcrypt.hashSync(user.password, 10)
-    await knex('users').insert({ ...user, password: hash })
-    res.status(201).send(`Successfully created your account 🎉`)
+    const hash = await bcrypt.hashSync(req.body.password, 10)
+    await knex('users').insert({ ...req.body, password: hash })
+    res.status(201).send(`Welcome, ${req.body.username}!`)
   } catch (error) {
     console.error(error)
     error.code === '23505'
       ? res.status(500).json({
           error,
           msg: `Please enter a unique user name. ${
-            user.username
+            req.body.username
           } already exists.`
         })
-      : res
-          .status(500)
-          .json({ error, msg: `Something went wrong while creating new user.` })
+      : res.status(500).json({
+          error,
+          msg: `Something went wrong while signing-up new user.`
+        })
   }
 }
 
@@ -43,18 +82,20 @@ const login = async (req, res) => {
       .where('username', req.body.username)
       .first()
 
-    if (!user)
-      return res.status(400).send(`${req.body.username} doesn't exist.`)
-    else {
+    if (user) {
       const isAuthenticated = await bcrypt.compareSync(
         req.body.password,
         user.password
       )
-      isAuthenticated
-        ? res.status(200).send(`Welcome back, ${user.username}!`)
-        : res
-            .status(401)
-            .send(`Uh, oh! Either the username or password is incorrect.`)
+      if (isAuthenticated) {
+        req.session.username = user.username // this cookie is sent by express-session library
+        res.status(200).send(`Welcome back, ${user.username}!`)
+      } else
+        res
+          .status(401)
+          .send(`Uh, oh! Either the username or password is incorrect.`)
+    } else {
+      res.status(400).send(`${req.body.username} doesn't exist.`)
     }
   } catch (error) {
     console.error(error)
@@ -65,7 +106,26 @@ const login = async (req, res) => {
   }
 }
 
-const getUsers = async (req, res) => {
+const logout = (req, res) => {
+  if (req.session) {
+    // destroy this cookie session and create a new one on new request
+    req.session.destroy(err => {
+      if (err) {
+        res.json({
+          error: err,
+          msg: `Something went wrong while logging-out the user.`
+        })
+      } else {
+        res.clearCookie('cookie')
+        res.redirect('/')
+      }
+    })
+  } else {
+    res.send('The user is already logged-out.')
+  }
+}
+
+const users = async (req, res) => {
   try {
     const users = await knex('users')
     res.status(200).json(users)
@@ -79,36 +139,14 @@ const getUsers = async (req, res) => {
 
 // middleware
 const protectRoute = async (req, res, next) => {
-  const { username, password } = req.headers
-
-  if (!username || !password)
-    return res.status(400).send(`Unauthorized user. Please login first.`)
-
-  try {
-    const user = await knex('users')
-      .where('username', username)
-      .first()
-
-    if (!user) return res.status(400).send(`${username} doesn't exist.`)
-    else {
-      const isAuthenticated = await bcrypt.compareSync(password, user.password)
-      isAuthenticated
-        ? next()
-        : res
-            .status(401)
-            .send(`Uh, oh! Either the username or password is incorrect.`)
-    }
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({
-      error,
-      msg: `Something went wrong while logging-in ${username}.`
-    })
-  }
+  req.session && req.session.username
+    ? next()
+    : res.status(401).send('Unauthorized user. Please login first.')
 }
 
 // routes
 app.get('/', (rep, res) => res.send('server is alive 🥁'))
-app.post('/register', register)
+app.post('/signup', signup)
 app.post('/login', login)
-app.get('/users', protectRoute, getUsers)
+app.get('/users', protectRoute, users)
+app.get('/logout', logout)

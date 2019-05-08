@@ -5,7 +5,8 @@ const bcrypt = require('bcrypt')
 const session = require('express-session')
 
 // variables
-const secret = process.env.COOKIE_SECRET
+// const secret = process.env.COOKIE_SECRET
+const secret = 'some password to encrypt cookie session'
 const port = process.env.PORT || 9090
 
 // config server
@@ -67,18 +68,20 @@ const login = async (req, res) => {
       .where('username', req.body.username)
       .first()
 
-    if (!user)
-      return res.status(400).send(`${req.body.username} doesn't exist.`)
-    else {
+    if (user) {
       const isAuthenticated = await bcrypt.compareSync(
         req.body.password,
         user.password
       )
-      isAuthenticated
-        ? res.status(200).send(`Welcome back, ${user.username}!`)
-        : res
-            .status(401)
-            .send(`Uh, oh! Either the username or password is incorrect.`)
+      if (isAuthenticated) {
+        req.session.username = user.username // this cookie is sent by express-session library
+        res.status(200).send(`Welcome back, ${user.username}!`)
+      } else
+        res
+          .status(401)
+          .send(`Uh, oh! Either the username or password is incorrect.`)
+    } else {
+      res.status(400).send(`${req.body.username} doesn't exist.`)
     }
   } catch (error) {
     console.error(error)

@@ -46,12 +46,7 @@ psql ${dbName}
 select * from "users";
 ```
 
-#5 
-- write Express app in `index.js`
-```bash
-source ./cookie.env
-```
-- test the endpoints in Postman
+#5 write Express app in `index.js` and test the endpoints in Postman
 
 #6
 ```bash

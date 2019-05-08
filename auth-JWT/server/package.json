@@ -1,0 +1,15 @@
+{
+  "name": "auth-JWT",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4",
+    "faker": "^4.1.0",
+    "knex": "^0.16.5",
+    "pg": "^7.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0"
+  }
+}

@@ -1,12 +1,12 @@
 // imports
+require('dotenv').config()
 const express = require('express')
 const knex = require('./db/knex')
 const bcrypt = require('bcrypt')
 const session = require('express-session')
 
 // variables
-// const secret = process.env.COOKIE_SECRET
-const secret = 'some password to encrypt cookie session'
+const secret = process.env.SECRET
 const port = process.env.PORT || 9090
 
 // config server
@@ -33,23 +33,22 @@ app.use(
 
 // route handlers
 const signup = async (req, res) => {
-  const user = req.body
-
-  if (!user.username || !user.password)
+  if (!req.body.username || !req.body.password)
     return res.status(400).send(`Username and password is required.`)
 
   try {
+    req.session.username = req.body.username // save username in cookie session
     // hash the original password, then hash the hash 2^10 times
-    const hash = await bcrypt.hashSync(user.password, 10)
-    await knex('users').insert({ ...user, password: hash })
-    res.status(201).send(`Successfully created your account 🎉`)
+    const hash = await bcrypt.hashSync(req.body.password, 10)
+    await knex('users').insert({ ...req.body, password: hash })
+    res.status(201).send(`Welcome, ${req.body.username}!`)
   } catch (error) {
     console.error(error)
     error.code === '23505'
       ? res.status(500).json({
           error,
           msg: `Please enter a unique user name. ${
-            user.username
+            req.body.username
           } already exists.`
         })
       : res.status(500).json({

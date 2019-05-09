@@ -19,9 +19,36 @@ app.use(express.json())
 app.listen(port, () => console.log(`Let's go! 👁`))
 
 // route handlers
+const signup = async (req, res) => {
+  if (!req.body.name || !req.body.password || !req.body.department)
+    return res
+      .status(400)
+      .send(`The user's name, password and department are required.`)
+
+  try {
+    // hash the original password, then hash the hash 2^10 times
+    const hash = await bcrypt.hashSync(req.body.password, 10)
+    const user = { ...req.body, password: hash }
+    const token = generateToken(user)
+    await knex('users').insert(user)
+    res.status(201).json({ msg: `Welcome, ${req.body.name}!`, token })
+  } catch (error) {
+    console.error(error)
+    error.code === '23505'
+      ? res.status(500).json({
+          error,
+          msg: `Please enter a unique name. ${req.body.name} already exists.`
+        })
+      : res.status(500).json({
+          error,
+          msg: `Something went wrong while signing-up ${req.body.name}.`
+        })
+  }
+}
+
 const login = async (req, res) => {
   if (!req.body.name || !req.body.password)
-    return res.status(400).send(`The user's name and password is required.`)
+    return res.status(400).send(`The user's name and password are required.`)
 
   try {
     const user = await knex('users')
@@ -73,4 +100,5 @@ const generateToken = user => {
 
 // routes
 app.get('/', (rep, res) => res.send(`Let's go! 👁`))
+app.post('/signup', signup)
 app.post('/login', login)

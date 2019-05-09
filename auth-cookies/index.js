@@ -140,7 +140,7 @@ const users = async (req, res) => {
 }
 
 // middleware
-const protectRoute = async (req, res, next) => {
+const protectRoute = (req, res, next) => {
   req.session && req.session.username
     ? next()
     : res.status(401).send('Unauthorized user. Please login first.')

@@ -93,16 +93,31 @@ const users = async (req, res) => {
 }
 
 // middleware
-const protectRoute = async (req, res, next) => {
+const protectRoute = (req, res, next) => {
   const token = req.headers.token
   jwt.verify(token, secret, (error, decodedToken) => {
     if (error) {
       res.status(401).send('Unauthorized user. Please login first.')
     } else {
       console.log('decodedToken', decodedToken)
+      req.decodedToken = decodedToken
       next()
     }
   })
+}
+
+const checkRole = role => {
+  return (req, res, next) => {
+    req.decodedToken &&
+    req.decodedToken.role &&
+    req.decodedToken.role.includes(role)
+      ? next()
+      : res
+          .status(403)
+          .send(
+            `${req.decodedToken.role}s doesn't have access to this resource.`
+          )
+  }
 }
 
 // helpers
@@ -126,4 +141,4 @@ const generateToken = user => {
 app.get('/', (rep, res) => res.send(`Let's go! 👁`))
 app.post('/signup', signup)
 app.post('/login', login)
-app.get('/users', protectRoute, users)
+app.get('/users', protectRoute, checkRole('Manager'), users)

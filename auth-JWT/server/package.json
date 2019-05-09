@@ -1,23 +1,21 @@
 {
-  "name": "auth-session",
+  "name": "auth-JWT",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "author": "Divya Nair",
   "scripts": {
     "server": "nodemon index.js",
     "start": "node index.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
-    "connect-session-knex": "^1.4.0",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
-    "express-session": "^1.16.1",
     "faker": "^4.1.0",
+    "helmet": "^3.18.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.16.5",
-    "pg": "^7.10.0",
-    "helmet": "^3.18.0"
+    "pg": "^7.10.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.0"

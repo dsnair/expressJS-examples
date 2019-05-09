@@ -2,6 +2,7 @@
 require('dotenv').config()
 const express = require('express')
 const knex = require('./db/knex')
+const helmet = require('helmet') // secures HTTP headers
 const bcrypt = require('bcrypt')
 const session = require('express-session')
 const KnexSessionStore = require('connect-session-knex')(session) // require()() is called currying
@@ -14,6 +15,7 @@ const port = process.env.PORT || 9090
 const app = express()
 app.listen(port, () => console.log('server is alive 🥁'))
 
+app.use(helmet())
 app.use(express.json()) // parse incoming request data
 
 app.use(

@@ -22,7 +22,11 @@ chmod +x init.sh
 - Edit `knexfile.js`
 - Edit `knex.js`
 
-#3 Write table schema in `/db/migrations/[timestamp]_${dbName}.js`
+#3 
+```bash
+./node_modules/.bin/knex migrate:make ${dbName}
+```
+creates `/db/migrations/[timestamp]_${dbName}.js`. Write the table schema in this file.
 
 #4 Setup seeds
 ```bash
@@ -46,13 +50,15 @@ psql ${dbName}
 select * from "users";
 ```
 
-#5 write Express app in `index.js` and test the endpoints in Postman
+#5 
+- Write Express app in `index.js` and test the endpoints in Postman
+- Write secrets in `.env` in KEY=VALUE format, example: `SECRET=some string without quotes`
 
 #6
 ```bash
 dropdb ${dbName}
 ```
-deletes the postgres DB
+deletes the postgres DB.
 
 
 ## Assignment

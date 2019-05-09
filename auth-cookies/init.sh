@@ -1,13 +1,14 @@
 #!/bin/bash
 
 yarn init -y  # creates package.json
-yarn add express knex pg faker
+yarn add express knex pg bcrypt dotenv helmet faker
 yarn add -D nodemon
 
 touch index.js  # creates empty 'index.js'
+touch .env
 mkdir db db/migrations db/seeds
 touch db/knex.js
 
-createdb project  # creates postgres DB named 'project'
+read -p "Give a name for your new database: " dbName
+createdb $dbName  # creates postgres DB
 ./node_modules/.bin/knex init  # creates 'knexfile.js'
-./node_modules/.bin/knex migrate:make project  # creates '/db/migrations/[timestamp]_project.js'

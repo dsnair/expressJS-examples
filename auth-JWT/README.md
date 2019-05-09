@@ -9,7 +9,66 @@
 
 ## Description
 
-In this project we'll implement a full authentication workflow (register/login/logout/restrict endpoint) using `Node.js`, `Express`, `Postres` and `JSON Web Tokens` on the server and a `React` Web Application for the client.
+In this project we'll implement a full authentication workflow (register/login/logout/restrict endpoint) using `Node.js`, `Express`, `Postgres` and `JSON Web Tokens` on the server and a `React` Web Application for the client.
+
+## Steps
+
+#1
+
+```bash
+chmod +x init.sh
+./init.sh
+```
+
+#2
+
+- Edit `knexfile.js`
+- Edit `knex.js`
+
+#3
+
+```bash
+./node_modules/.bin/knex migrate:make ${dbName}
+```
+
+creates `/db/migrations/[timestamp]_${dbName}.js`. Write the table schema in this file.
+
+#4 Setup seeds
+
+```bash
+./node_modules/.bin/knex seed:make 01_users  # users is a table in ${dbName}
+```
+
+creates `01_users.js`.
+
+- Edit this file to have initial seed data, then
+
+```bash
+./node_modules/.bin/knex migrate:latest
+./node_modules/.bin/knex seed:run
+```
+
+To see the seed data in DB,
+
+```bash
+psql ${dbName}
+```
+
+```sql
+select * from "users";
+```
+
+#5
+- Write Express app in `index.js` and test the endpoints in Postman
+- Write secrets in `.env` in KEY=VALUE format, example: `SECRET=some string without quotes`
+
+#6
+
+```bash
+dropdb ${dbName}
+```
+
+deletes the postgres DB.
 
 ## Assignment
 

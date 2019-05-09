@@ -12,27 +12,33 @@ Use `Node.js`, `Express` and `Knex` to build an API that provides **Register** a
 
 ## Steps
 
-#1 
+#1
+
 ```bash
 chmod +x init.sh
 ./init.sh
 ```
 
-#2 
+#2
+
 - Edit `knexfile.js`
 - Edit `knex.js`
 
-#3 
+#3
+
 ```bash
 ./node_modules/.bin/knex migrate:make ${dbName}
 ```
+
 creates `/db/migrations/[timestamp]_${dbName}.js`. Write the table schema in this file.
 
 #4 Setup seeds
+
 ```bash
 ./node_modules/.bin/knex seed:make 01_users  # users is a table in ${dbName}
 ```
-creates `01_users.js`. 
+
+creates `01_users.js`.
 
 - Edit this file to have initial seed data, then
 
@@ -42,6 +48,7 @@ creates `01_users.js`.
 ```
 
 To see the seed data in DB,
+
 ```bash
 psql ${dbName}
 ```
@@ -50,16 +57,28 @@ psql ${dbName}
 select * from "users";
 ```
 
-#5 
-- Write Express app in `index.js` and test the endpoints in Postman
+#5
+
+- Write Express app in `index.js`
 - Write secrets in `.env` in KEY=VALUE format, example: `SECRET=some string without quotes`
+- In `package.json`, include
+
+```js
+"scripts": {
+    "server": "nodemon index.js",
+    "start": "node index.js"
+},
+```
+
+- Test the endpoints in Postman
 
 #6
+
 ```bash
 dropdb ${dbName}
 ```
-deletes the postgres DB.
 
+deletes the postgres DB.
 
 ## Assignment
 

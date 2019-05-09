@@ -59,8 +59,19 @@ select * from "users";
 ```
 
 #5
-- Write Express app in `index.js` and test the endpoints in Postman
+
+- Write Express app in `index.js`
 - Write secrets in `.env` in KEY=VALUE format, example: `SECRET=some string without quotes`
+- In `package.json`, include
+
+```js
+"scripts": {
+    "server": "nodemon index.js",
+    "start": "node index.js"
+},
+```
+
+- Test the endpoints in Postman
 
 #6
 

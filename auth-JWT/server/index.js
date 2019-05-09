@@ -79,7 +79,31 @@ const login = async (req, res) => {
   }
 }
 
+const users = async (req, res) => {
+  try {
+    const users = await knex('users')
+    res.status(200).json(users)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      error,
+      msg: 'Something went wrong while fetching users.'
+    })
+  }
+}
+
 // middleware
+const protectRoute = async (req, res, next) => {
+  const token = req.headers.token
+  jwt.verify(token, secret, (error, decodedToken) => {
+    if (error) {
+      res.status(401).send('Unauthorized user. Please login first.')
+    } else {
+      console.log('decodedToken', decodedToken)
+      next()
+    }
+  })
+}
 
 // helpers
 const generateToken = user => {
@@ -102,3 +126,4 @@ const generateToken = user => {
 app.get('/', (rep, res) => res.send(`Let's go! 👁`))
 app.post('/signup', signup)
 app.post('/login', login)
+app.get('/users', protectRoute, users)

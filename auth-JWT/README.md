@@ -72,6 +72,7 @@ select * from "users";
 ```
 
 - Test the endpoints in Postman
+- (Optional) Go to [https://jwt.io/](https://jwt.io/) and paste the JWT token in there to review the payload. This is why no sensitive data should be in the payload.
 
 #6
 

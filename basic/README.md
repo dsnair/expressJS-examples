@@ -27,6 +27,23 @@
 curl http://localhost:5000
 ```
 
+```bash
+curl http://localhost:5000 -i
+```
+
+```bash
+curl http://localhost:5000?sortby=pet
+```
+
+```bash
+curl 'http://localhost:5000?sortby=pet&limit=3'
+```
+Note `''` in URL for multiple query parameters.
+
+| Flag | Purpose                         |
+|------|-------------------------------- |
+| -i   | include HTTP header in response |
+
 2. POST
 ```bash
 curl http://localhost:5000 -d '{"name":"lizard"}' -H "Content-Type: application/json"

@@ -25,18 +25,13 @@
 ## 1. GET
 
 ```bash
-curl http://localhost:5000/pets # without authorization
+curl http://localhost:5000/ # without authorization
 ```
 
 ```bash
-curl http://localhost:5000/pets -H 'name:divya' # with authorization
-```
-
-```bash
-curl http://localhost:5000/pets -H 'name:divya' -o response.json
+curl http://localhost:5000/ -H 'name:divya' # with authorization
 ```
 
 | Flag        | Purpose                               |
 | ----------- | ------------------------------------- |
 | -H          | send customized request header        |
-| -o filename | saves the endpoint response in a file |

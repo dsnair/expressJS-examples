@@ -25,56 +25,13 @@
 ## 1. GET
 
 ```bash
-curl http://localhost:5000
+curl http://localhost:5000/pets
 ```
 
 ```bash
-curl http://localhost:5000 -o response.json
+curl http://localhost:5000/pets -o response.json
 ```
 
-```bash
-curl http://localhost:5000?sortby=pet
-```
-
-```bash
-curl 'http://localhost:5000?sortby=pet&limit=3'
-```
-
-Note `''` in URL for multiple query parameters.
-
-## 2. POST
-
-```bash
-curl http://localhost:5000 -d '{"pet":"lizard"}' -H 'Content-Type: application/json'
-```
-
-## 3. PUT
-
-```bash
-curl http://localhost:5000/3 -d '{"pet":"bird"}' -X PUT -H 'Content-Type: application/json'
-```
-
-## 4. DELETE
-
-```bash
-curl http://localhost:5000/1 -X DELETE
-```
-
-```bash
-curl http://localhost:5000/1 -X DELETE -i
-```
-
-| Flag        | Purpose                         |
-| ----------- | ------------------------------- |
-| -d          | POST given data                 |
-| -H          | send request header             |
-| -X          | specify HTTP request method     |
-| -i          | include HTTP header in response |
-| -o filename | save response in a file         |
-
-# C. Definitions
-
-1. Endpoints = URL that points to a resource
-2. Resource
-3. API
-4. RESTful
+| Flag        | Purpose                 |
+| ----------- | ----------------------- |
+| -o filename | save response in a file |

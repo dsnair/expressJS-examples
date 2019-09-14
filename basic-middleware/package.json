@@ -1,7 +1,7 @@
 {
-  "name": "basic-router",
+  "name": "basic-middleware",
   "version": "1.0.0",
-  "description": "Basic of API design with router and middleware",
+  "description": "Basic of API design with middleware",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -32,6 +32,7 @@ const get = (req, res) => res.status(200).json(db)
 
 // middlewares
 const protectRoute = (req, res, next) => {
+  console.log(req.headers)
   req.headers.name ? next() : res.status(401).send('Please login!')
 }
 

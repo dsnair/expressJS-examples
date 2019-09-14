@@ -31,6 +31,10 @@ let db = [
 const get = (req, res) => res.status(200).json(db)
 
 // middlewares
+const protectRoute = (req, res, next) => {
+  req.headers.name ? next() : res.status(401).send('Please login!')
+}
+
 const upperCase = (req, res, next) => {
   for (obj of db) {
     obj.pet = obj.pet.toUpperCase()
@@ -39,15 +43,21 @@ const upperCase = (req, res, next) => {
 }
 
 // routes
-router.get('/', upperCase, get)
+router.get('/', protectRoute, upperCase, get)
 
 // export router
 module.exports = router
 
 /*
-- upperCase() is a local middleware.
-- next() is the middleware's callback that indicates that the current middleware has finished
-and it should call the next middleware in the queue.
-Don't forget next() or the request will hang and client will get timeout error.
-- There can be 0+ middlewares.
+- local middlewares:
+  - protectRoute(), upperCase()
+  - There can be 0+ middlewares
+  - Use cases:
+    - protecting routes against unauthorized users
+    - storing user data
+    - data cleaning, etc.
+- next()
+  - is the middleware's callback that indicates that the current middleware has finished
+  and it should call the next middleware in the queue.
+  - Don't forget to call next() or the request will hang and client will get timeout error.
 */

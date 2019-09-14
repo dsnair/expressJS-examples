@@ -53,7 +53,7 @@ const put = (req, res) => {
       return res.status(201).json(db)
     }
   }
-  res.status(400).send("This pet doesn't exist.")
+  res.status(404).send("This pet doesn't exist.")
 }
 
 const del = (req, res) => {
@@ -63,7 +63,7 @@ const del = (req, res) => {
       return res.status(200).json(db)
     }
   }
-  res.status(400).send("This pet doesn't exist.")
+  res.status(404).send("This pet doesn't exist.")
 }
 
 // routes

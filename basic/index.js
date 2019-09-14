@@ -40,20 +40,34 @@ const get = (req, res) => {
 const post = (req, res) => {
   const newPet = {
     id: db.length + 1,
-    ...req.body
+    pet: 'pet' in req.body ? req.body.pet : ''
   }
   db.push(newPet)
   res.status(201).json(db)
 }
 
 const put = (req, res) => {
-  if (req.params.id <= db.length) {
-    db[req.params.id].pet = req.body.pet
+  for (obj of db) {
+    if (obj.id == req.params.id) {
+      obj.pet = 'pet' in req.body ? req.body.pet : ''
+      return res.status(201).json(db)
+    }
   }
-  res.status(201).json(db)
+  res.status(400).send("This pet doesn't exist.")
+}
+
+const del = (req, res) => {
+  for (pet of db) {
+    if (pet.id == req.params.id) {
+      db.splice(db.indexOf(pet), 1)
+      return res.status(200).json(db)
+    }
+  }
+  res.status(400).send("This pet doesn't exist.")
 }
 
 // routes
 server.get('/', get)
 server.post('/', post)
 server.put('/:id', put)
+server.delete('/:id', del)

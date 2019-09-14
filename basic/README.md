@@ -50,6 +50,16 @@ curl http://localhost:5000 -d '{"pet":"lizard"}' -H 'Content-Type: application/j
 curl http://localhost:5000/3 -d '{"pet":"bird"}' -X PUT -H 'Content-Type: application/json'
 ```
 
+## DELETE
+
+```bash
+curl http://localhost:5000/1 -X DELETE
+```
+
+```bash
+curl http://localhost:5000/1 -X DELETE -i
+```
+
 | Flag | Purpose                         |
 | ---- | ------------------------------- |
 | -d   | POST given data                 |

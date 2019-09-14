@@ -1,0 +1,19 @@
+{
+  "name": "basic-router",
+  "version": "1.0.0",
+  "description": "Basic of API design with router and middleware",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Divya Nair",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}

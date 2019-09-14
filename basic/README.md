@@ -1,7 +1,7 @@
 # HTTP Codes
 
 | Code | Purpose       |
-|------|---------------|
+| ---- | ------------- |
 | 1xx  | Informational |
 | 2xx  | Success       |
 | 3xx  | Redirection   |
@@ -11,7 +11,7 @@
 [https://www.restapitutorial.com/httpstatuscodes.html](https://www.restapitutorial.com/httpstatuscodes.html)
 
 | Code | Meaning               | Details                                                           |
-|------|-----------------------|-------------------------------------------------------------------|
+| ---- | --------------------- | ----------------------------------------------------------------- |
 | 200  | OK                    | standard response for successful request                          |
 | 201  | Created               | successful creation occurred via POST or PUT                      |
 | 204  | No Content            | request was fulfilled and there is no body to return (eg: DELETE) |
@@ -22,13 +22,10 @@
 
 # CURL
 
-1. GET
-```bash
-curl http://localhost:5000
-```
+## GET
 
 ```bash
-curl http://localhost:5000 -i
+curl http://localhost:5000
 ```
 
 ```bash
@@ -38,21 +35,27 @@ curl http://localhost:5000?sortby=pet
 ```bash
 curl 'http://localhost:5000?sortby=pet&limit=3'
 ```
+
 Note `''` in URL for multiple query parameters.
 
-| Flag | Purpose                         |
-|------|-------------------------------- |
-| -i   | include HTTP header in response |
+## POST
 
-2. POST
 ```bash
-curl http://localhost:5000 -d '{"name":"lizard"}' -H "Content-Type: application/json"
+curl http://localhost:5000 -d '{"pet":"lizard"}' -H 'Content-Type: application/json'
 ```
 
-| Flag | Purpose                 |
-|------|-------------------------|
-| -d   | POST given data         |
-| -H   | set request header type |
+## PUT
+
+```bash
+curl http://localhost:5000/3 -d '{"pet":"bird"}' -X PUT -H 'Content-Type: application/json'
+```
+
+| Flag | Purpose                         |
+| ---- | ------------------------------- |
+| -d   | POST given data                 |
+| -H   | specify request header type     |
+| -X   | specify HTTP request method     |
+| -i   | include HTTP header in response |
 
 # Definitions
 

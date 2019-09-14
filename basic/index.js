@@ -42,11 +42,18 @@ const post = (req, res) => {
     id: db.length + 1,
     ...req.body
   }
-
   db.push(newPet)
+  res.status(201).json(db)
+}
+
+const put = (req, res) => {
+  if (req.params.id <= db.length) {
+    db[req.params.id].pet = req.body.pet
+  }
   res.status(201).json(db)
 }
 
 // routes
 server.get('/', get)
 server.post('/', post)
+server.put('/:id', put)

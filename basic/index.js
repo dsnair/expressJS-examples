@@ -2,8 +2,10 @@ const express = require('express')
 
 // setup server
 const server = express()
-server.use(express.json()) // for POST, parses req.body
 server.listen(5000, () => console.log('Listening on 5000 ...'))
+
+// global middleware
+server.use(express.json()) // for POST, parses req.body
 
 // database
 let db = [

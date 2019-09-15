@@ -48,6 +48,10 @@ Note `''` in URL for multiple query parameters.
 curl http://localhost:5000 -d '{"pet":"lizard"}' -H 'Content-Type: application/json'
 ```
 
+```bash
+curl http://localhost:5000 -d '{"pet":"lizard"}' -H 'Content-Type: application/json' -H 'name:divya' -H 'password: password'  # send authentication credentials
+```
+
 ## 3. PUT
 
 ```bash

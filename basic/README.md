@@ -92,7 +92,8 @@ Normalizing data means that the following conditions are met:
     v. All field relate directly to the main data keyed by the primary key  
 [Reference](https://www.youtube.com/watch?v=TUsoTNch95w)
 
-6. Table Relationships
+6. Table Relationships  
+    [Reference](https://www.youtube.com/watch?v=-Bau_Ed18Og)
     - One-to-One
         - Example: citizens & SSNs. A citizen has one SSN, and a SSN belongs to one citizen.
 
@@ -103,4 +104,3 @@ Normalizing data means that the following conditions are met:
     - Many-to-Many
         - Example: students & classes. A student registers for many classes, and a class contains many students.
         - Many-to-many relationships are broken apart to two one-to-one relationships by having a third table (called the join table). This table has two fields: the primary key from each of the two tables. Each record shows how one primary key value relates to the other primary key value.
-        - [Reference](https://www.youtube.com/watch?v=-Bau_Ed18Og)

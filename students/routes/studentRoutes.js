@@ -6,7 +6,7 @@ const router = express.Router()
 // route handlers
 const getStudents = async (req, res) => {
   try {
-    const students = await knex.select().from('students')
+    const students = await knex('students')
     return res.status(200).json(students)
   } catch (error) {
     console.error(error)

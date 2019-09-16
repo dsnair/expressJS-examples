@@ -6,7 +6,7 @@ const router = express.Router()
 // route handlers
 const getCohorts = async (req, res) => {
   try {
-    const cohorts = await knex.select().from('cohorts')
+    const cohorts = await knex('cohorts')
     return res.status(200).json(cohorts)
   } catch (error) {
     res.status(500).json({ error, msg: 'Error getting cohorts' })
@@ -40,7 +40,7 @@ const deleteCohort = async (req, res) => {
       .del()
     if (!isDeleted) return res.status(404).send(`cohort ID ${id} doesn't exist`)
     else {
-      const cohorts = await knex.select().from('cohorts')
+      const cohorts = await knex('cohorts')
       res.status(200).json(cohorts)
     }
   } catch (error) {
@@ -62,7 +62,7 @@ const putCohort = async (req, res) => {
       .update(newCohort)
     if (!isUpdated) return res.status(404).send(`cohort ID ${id} doesn't exist`)
     else {
-      const cohorts = await knex.select().from('cohorts')
+      const cohorts = await knex('cohorts')
       res.status(200).json(cohorts)
     }
   } catch (error) {
@@ -85,7 +85,7 @@ const postCohort = async (req, res) => {
 
   try {
     await knex('cohorts').insert(newCohort)
-    const cohorts = await knex.select().from('cohorts')
+    const cohorts = await knex('cohorts')
     res.status(201).json(cohorts)
   } catch (error) {
     error.code === '23505'

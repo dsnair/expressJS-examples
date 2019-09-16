@@ -15,7 +15,7 @@ const postProject = async (req, res) => {
     return res.status(400).send('A project must have a name.')
   try {
     await knex('projects').insert(newProject)
-    const projects = await knex.select().from('projects')
+    const projects = await knex('projects')
     res.status(201).json(projects)
   } catch (error) {
     console.error(error)
@@ -38,7 +38,7 @@ const postAction = async (req, res) => {
       ...newAction,
       projectId: req.params.projectId
     })
-    const actions = await knex.select().from('actions')
+    const actions = await knex('actions')
     res.status(201).json(actions)
   } catch (error) {
     console.error(error)

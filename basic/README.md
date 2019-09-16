@@ -76,9 +76,31 @@ curl http://localhost:5000/1 -X DELETE -i
 | -i          | include HTTP header in response |
 | -o filename | save response in a file         |
 
-# C. Definitions
+# C. Concepts
 
 1. Endpoints = URL that points to a resource
 2. Resource
 3. API
 4. RESTful
+
+5. Data Normalization  
+Normalizing data means that the following conditions are met:  
+    i. Each record has a primary key  
+    ii. No fields are repeated  
+    iii. Each field entry contains a single data point (example: no arrays)  
+    iv. There are no redundant data entries  
+    v. All field relate directly to the main data keyed by the primary key  
+[Reference](https://www.youtube.com/watch?v=TUsoTNch95w)
+
+6. Table Relationships
+    - One-to-One
+        - Example: citizens & SSNs. A citizen has one SSN, and a SSN belongs to one citizen.
+
+    - One-to-Many
+        - Example: users & posts. A user makes many posts, but a post belongs to only one user.
+        - This is a use case for using the foreign key. Foreign key always belongs to the many-table (posts) where it relates to the primary key from the one-table (user).
+
+    - Many-to-Many
+        - Example: students & classes. A student registers for many classes, and a class contains many students.
+        - Many-to-many relationships are broken apart to two one-to-one relationships by having a third table (called the join table). This table has two fields: the primary key from each of the two tables. Each record shows how one primary key value relates to the other primary key value.
+        - [Reference](https://www.youtube.com/watch?v=-Bau_Ed18Og)

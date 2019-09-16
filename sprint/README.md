@@ -6,20 +6,6 @@ This Sprint explored Adding Data Persistence to Web APIs and you were taught the
 
 In your challenge for this Sprint, you will demonstrate proficiency by creating an API that persist data to PostgreSQL (or SQLite3).
 
-## Instructions
-
-**Read these instructions carefully. Understand exactly what is expected _before_ starting this Sprint Challenge.**
-
-This is an individual assessment. All work must be your own. Your challenge score is a measure of your ability to work independently using the material covered through this sprint. You need to demonstrate proficiency in the concepts and objectives introduced and practiced in preceding days.
-
-You are not allowed to collaborate during the Sprint Challenge. However, you are encouraged to follow the twenty-minute rule and seek support from your PM and Instructor in your cohort help channel on Slack. Your work reflects your proficiency Adding Data Persistence to Web APIs and your command of the concepts and techniques in the Introduction to Relational Databases and SQL, Inserting and Modifying Data, Querying Data; Migrations and Seeding and Introduction to Data Modeling modules.
-
-You have three hours to complete this challenge. Plan your time accordingly.
-
-## Commits
-
-Commit your code regularly and meaningfully. This helps both you (in case you ever need to return to old code for any number of reasons) and your project manager.
-
 ## Description
 
 In this challenge, you **design** and build an application for managing `Projects` and `Actions` in the spirit of David Allen's _Getting Things Done (GTD)_ methodology.
@@ -47,24 +33,7 @@ Demonstrate your understanding of this week's concepts by answering the followin
 
 1. What do we need in order to have a _many to many_ relationship between two tables.
 
-> A third table, called the join table, which is used to break the many-to-many relationships into two one-to-many relationships. This is done by having foreign keys from each of the two tables.
-
-## Project Set Up
-
-Follow these steps for starting your project.
-
-- Create a forked copy of this project.
-- Add your project manager as collaborator on Github.
-- Clone your OWN version of the repository (Not Lambda's by mistake!).
-- Create a new branch: git checkout -b `<firstName-lastName>`.
-- Implement the project on your newly created `<firstName-lastName>` branch, committing changes regularly.
-- Push commits: git push origin `<firstName-lastName>`.
-
-Follow these steps for completing your project.
-
-- Submit a Pull-Request to merge `<firstName-lastName>` Branch into master (student's Repository). **Please don't merge your own pull request**
-- Add your project manager as a reviewer on the pull-request
-- Your project manager will count the project as complete by merging the branch back into master.
+> A third table, called the join table, which is used to break the many-to-many relationships into two one-to-one relationships. The join table shows how the primary key value from one table relates to the primary key value from the other table.
 
 ## Minimum Viable Product
 

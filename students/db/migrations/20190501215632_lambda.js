@@ -1,5 +1,5 @@
 // implement changes to schema
-exports.up = async function(knex, Promise) {
+exports.up = async function(knex) {
   return await knex.schema
     .createTable('cohorts', table => {
       table.increments('cohortId').unsigned()
@@ -23,6 +23,6 @@ exports.up = async function(knex, Promise) {
 }
 
 // undo changes
-exports.down = async function(knex, Promise) {
-  return await knex.schema.dropTable('cohorts').dropTable('students')
+exports.down = async function(knex) {
+  return await knex.schema.dropTable('students').dropTable('cohorts') // drop tables in reverse order of dependency
 }

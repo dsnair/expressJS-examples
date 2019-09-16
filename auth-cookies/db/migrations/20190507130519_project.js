@@ -1,4 +1,4 @@
-exports.up = async function(knex, Promise) {
+exports.up = async function(knex) {
   return await knex.schema.createTable('users', table => {
     table.increments('userId').unsigned()
     table.string('username').notNullable().unique()
@@ -6,6 +6,6 @@ exports.up = async function(knex, Promise) {
   })
 }
 
-exports.down = async function(knex, Promise) {
+exports.down = async function(knex) {
   return await knex.schema.dropTable('users') // 'users' is a table in 'project' DB
 }

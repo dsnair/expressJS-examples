@@ -32,14 +32,36 @@ LIMIT
 
 ## 2. Create Database and Table
 
-- create a Postgres database, name it `budget`.
-- add an `accounts` table with the following _schema_:
+1. create a Postgres database, name it `budget`.
+
+```bash
+createdb budget
+```
+
+2. add an `accounts` table with the following _schema_:
 
   - `id`, numeric value with no decimal places that should auto-increment.
   - `name`, string, add whatever is necessary to make searching by name faster.
   - `budget` numeric value.
 
-- constraints
+and _constraints_:
   - the `id` should be the primary key for the table.
   - account `name` should be unique.
   - account `budget` is required.
+
+```bash
+psql budget
+```
+
+```sql
+CREATE TABLE accounts(
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE,
+    budget NUMERIC NOT NULL
+);
+```
+
+```bash
+\dt # list tables in DB
+\q # quit psql REPL
+```

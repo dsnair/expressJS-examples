@@ -19,7 +19,7 @@ const getStudentsByCohort = async (req, res) => {
     const students = await knex('cohorts')
       .join('students', 'cohorts.cohortId', 'students.cohortId')
       .where('cohorts.cohortId', id)
-      .select()
+
     if (!students.length)
       return res
         .status(200)
@@ -104,7 +104,7 @@ const getCohortById = async (req, res) => {
   try {
     const cohort = await knex('cohorts')
       .where('cohortId', id)
-      .select()
+
     if (!cohort.length) {
       return res.status(400).send(`Cohort ID ${id} doesn't exist`)
     } else {

@@ -57,7 +57,16 @@ SET PostalCode = 11122
 WHERE CustomerName = 'The Shire';
 ```
 
-9. Delete all users that have no orders. Should delete 17 (or 18 if you haven't deleted the record added) records.
+9. Delete all customers that have no orders. Should delete 17 (or 18 if you haven't deleted the record added) records.
+
+```sql
+DELETE FROM Customers
+WHERE CustomerID IN (SELECT C.CustomerID
+    FROM Customers As C
+    LEFT JOIN Orders AS O
+    ON C.CustomerID = O.CustomerID
+    WHERE O.OrderID IS NULL);
+```
 
 10. List orders grouped by customer showing the number of orders per customer. _Rattlesnake Canyon Grocery_ should have 7 orders.
 

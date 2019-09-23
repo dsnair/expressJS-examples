@@ -2,14 +2,14 @@
 exports.up = async function(knex) {
   return await knex.schema
     .createTable('cohorts', table => {
-      table.increments('cohortId').unsigned()
+      table.increments('cohortId')
       table
         .string('name')
         .notNullable()
         .unique()
     })
     .createTable('students', table => {
-      table.increments('studentId').unsigned()
+      table.increments('studentId')
       table.string('name').notNullable()
       table
         .integer('cohortId')

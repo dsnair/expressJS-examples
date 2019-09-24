@@ -22,7 +22,7 @@ app.listen(port, () => console.log(`Let's go! 👁`))
 const signup = async (req, res) => {
   if (!req.body.name || !req.body.password || !req.body.department)
     return res
-      .status(400)
+      .status(422)
       .send(`The user's name, password and department are required.`)
 
   try {
@@ -35,7 +35,7 @@ const signup = async (req, res) => {
   } catch (error) {
     console.error(error)
     error.code === '23505'
-      ? res.status(500).json({
+      ? res.status(422).json({
           error,
           msg: `Please enter a unique name. ${req.body.name} already exists.`
         })
@@ -48,7 +48,7 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   if (!req.body.name || !req.body.password)
-    return res.status(400).send(`The user's name and password are required.`)
+    return res.status(422).send(`The user's name and password are required.`)
 
   try {
     const user = await knex('users')

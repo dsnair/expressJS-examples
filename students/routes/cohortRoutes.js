@@ -38,8 +38,9 @@ const deleteCohort = async (req, res) => {
     const isDeleted = await knex('cohorts')
       .where('cohortId', id)
       .del()
-    if (!isDeleted) return res.status(404).send(`cohort ID ${id} doesn't exist`)
-    else {
+    if (!isDeleted) {
+      return res.status(422).send(`cohort ID ${id} doesn't exist`)
+    } else {
       const cohorts = await knex('cohorts')
       res.status(200).json(cohorts)
     }
@@ -53,25 +54,24 @@ const putCohort = async (req, res) => {
   const newCohort = req.body
 
   if (!newCohort.name) {
-    return res.status(400).send(`Cohort name must be provided`)
+    return res.status(422).send(`Cohort name must be provided`)
   }
 
   try {
     const isUpdated = await knex('cohorts')
       .where('cohortId', id)
       .update(newCohort)
-    if (!isUpdated) return res.status(404).send(`cohort ID ${id} doesn't exist`)
-    else {
+    if (!isUpdated) {
+      return res.status(422).send(`cohort ID ${id} doesn't exist`)
+    } else {
       const cohorts = await knex('cohorts')
       res.status(200).json(cohorts)
     }
   } catch (error) {
     error.code === '23505'
-      ? res.status(500).json({
+      ? res.status(422).json({
           error,
-          msg: `Please enter a unique cohort name. ${
-            newCohort.name
-          } already exists.`
+          msg: `Please enter a unique cohort name. ${newCohort.name} already exists.`
         })
       : res.status(500).json({ error, msg: `Error updating cohort ID ${id}` })
   }
@@ -81,7 +81,7 @@ const postCohort = async (req, res) => {
   const newCohort = req.body
 
   if (!newCohort.name)
-    return res.status(400).send(`Cohort name must be provided`)
+    return res.status(422).send(`Cohort name must be provided`)
 
   try {
     await knex('cohorts').insert(newCohort)
@@ -89,11 +89,9 @@ const postCohort = async (req, res) => {
     res.status(201).json(cohorts)
   } catch (error) {
     error.code === '23505'
-      ? res.status(500).json({
+      ? res.status(422).json({
           error,
-          msg: `Please enter a unique cohort name. ${
-            newCohort.name
-          } already exists.`
+          msg: `Please enter a unique cohort name. ${newCohort.name} already exists.`
         })
       : res.status(500).json({ error, msg: 'Error creating new cohort' })
   }
@@ -102,11 +100,10 @@ const postCohort = async (req, res) => {
 const getCohortById = async (req, res) => {
   const id = req.params.cohortId
   try {
-    const cohort = await knex('cohorts')
-      .where('cohortId', id)
+    const cohort = await knex('cohorts').where('cohortId', id)
 
     if (!cohort.length) {
-      return res.status(400).send(`Cohort ID ${id} doesn't exist`)
+      return res.status(422).send(`Cohort ID ${id} doesn't exist`)
     } else {
       res.status(200).json(cohort)
     }

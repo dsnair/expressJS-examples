@@ -12,7 +12,7 @@ const register = async (req, res) => {
   const user = req.body
 
   if (!user.username || !user.password)
-    return res.status(400).send(`Username and password is required.`)
+    return res.status(422).send(`Username and password is required.`)
 
   try {
     // hash the original password, then hash the hash 2^10 times
@@ -22,7 +22,7 @@ const register = async (req, res) => {
   } catch (error) {
     console.error(error)
     error.code === '23505'
-      ? res.status(500).json({
+      ? res.status(422).json({
           error,
           msg: `Please enter a unique user name. ${
             user.username
@@ -36,7 +36,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   if (!req.body.username || !req.body.password)
-    return res.status(400).send(`Username and password is required.`)
+    return res.status(422).send(`Username and password is required.`)
 
   try {
     const user = await knex('users')
@@ -44,7 +44,7 @@ const login = async (req, res) => {
       .first()
 
     if (!user)
-      return res.status(400).send(`${req.body.username} doesn't exist.`)
+      return res.status(422).send(`${req.body.username} doesn't exist.`)
     else {
       const isAuthenticated = await bcrypt.compareSync(
         req.body.password,
@@ -82,14 +82,14 @@ const protectRoute = async (req, res, next) => {
   const { username, password } = req.headers
 
   if (!username || !password)
-    return res.status(400).send(`Unauthorized user. Please login first.`)
+    return res.status(401).send(`Unauthorized user. Please login first.`)
 
   try {
     const user = await knex('users')
       .where('username', username)
       .first()
 
-    if (!user) return res.status(400).send(`${username} doesn't exist.`)
+    if (!user) return res.status(422).send(`${username} doesn't exist.`)
     else {
       const isAuthenticated = await bcrypt.compareSync(password, user.password)
       isAuthenticated

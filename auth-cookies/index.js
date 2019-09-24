@@ -50,7 +50,7 @@ app.use(
 // route handlers
 const signup = async (req, res) => {
   if (!req.body.username || !req.body.password)
-    return res.status(400).send(`Username and password is required.`)
+    return res.status(422).send(`Username and password is required.`)
 
   try {
     req.session.username = req.body.username // save username in cookie session
@@ -62,7 +62,7 @@ const signup = async (req, res) => {
   } catch (error) {
     console.error(error)
     error.code === '23505'
-      ? res.status(500).json({
+      ? res.status(422).json({
           error,
           msg: `Please enter a unique user name. ${
             req.body.username
@@ -77,7 +77,7 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   if (!req.body.username || !req.body.password)
-    return res.status(400).send(`Username and password is required.`)
+    return res.status(422).send(`Username and password is required.`)
 
   try {
     const user = await knex('users')
@@ -97,7 +97,7 @@ const login = async (req, res) => {
           .status(401)
           .send(`Uh, oh! Either the username or password is incorrect.`)
     } else {
-      res.status(400).send(`${req.body.username} doesn't exist.`)
+      res.status(422).send(`${req.body.username} doesn't exist.`)
     }
   } catch (error) {
     console.error(error)

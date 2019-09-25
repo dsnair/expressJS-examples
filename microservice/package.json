@@ -1,0 +1,16 @@
+{
+  "name": "microservice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "server": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "express": "^4.17.1"
+  }
+}
